@@ -22,5 +22,5 @@ export default function EmployeeLayout() {
     );
   }
 
-  return <Stack screenOptions={{ headerShown: false }} />;
+  return <Stack screenOptions={{ headerShown: true }} />;
 }

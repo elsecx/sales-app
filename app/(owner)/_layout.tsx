@@ -22,5 +22,5 @@ export default function OwnerLayout() {
     );
   }
 
-  return <Stack screenOptions={{ headerShown: false }} />;
+  return <Stack screenOptions={{ headerShown: true }} />;
 }
