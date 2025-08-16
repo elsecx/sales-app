@@ -8,7 +8,7 @@ export default function TabIndexScreen() {
     <View style={styles.container}>
       <Text style={styles.title}>Tab Index</Text>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EmptyScreen path="app/index.tsx" />
+      <EmptyScreen path="app/(employee)/index.tsx" />
     </View>
   );
 }
