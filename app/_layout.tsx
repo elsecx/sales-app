@@ -4,7 +4,9 @@ import { useFonts } from 'expo-font';
 import { Slot } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
+import { KeyboardAvoidingView, Platform } from 'react-native';
 import 'react-native-reanimated';
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 import { AuthProvider } from '@/contexts/AuthContext';
 import { useColorScheme } from '@/hooks/useColorScheme';
@@ -47,7 +49,16 @@ function RootLayoutNav() {
   return (
     <AuthProvider>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <Slot />
+        <SafeAreaProvider>
+          <SafeAreaView style={{ flex: 1 }} edges={["top", "right", "left"]}>
+            <KeyboardAvoidingView
+              style={{ flex: 1 }}
+              behavior={Platform.OS === "ios" ? "padding" : "height"}
+            >
+              <Slot />
+            </KeyboardAvoidingView>
+          </SafeAreaView>
+        </SafeAreaProvider>
       </ThemeProvider>
     </AuthProvider>
   );
