@@ -62,6 +62,7 @@ export const createButtonStyles = (
       fontWeight: "600",
     },
     content: {
+      backgroundColor: "transparent",
       flexDirection: "row",
       alignItems: "center",
       gap: 6,
