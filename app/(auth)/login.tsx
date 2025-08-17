@@ -2,6 +2,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { router } from "expo-router";
 import { useState } from "react";
 
+import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
 import { Text, View } from "@/components/Themed";
 import { useAuth } from "@/contexts/AuthContext";
@@ -66,6 +67,15 @@ export default function LoginScreen() {
             />
           )}
         />
+        <Button
+          status="primary"
+          appearance="filled"
+          loading={loading}
+          disabled={loading}
+          onPress={handleLogin}
+        >
+          Masuk
+        </Button>
       </View>
     </View>
   );
