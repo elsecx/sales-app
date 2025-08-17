@@ -50,14 +50,15 @@ function RootLayoutNav() {
     <AuthProvider>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
         <SafeAreaProvider>
-          <SafeAreaView style={{ flex: 1 }} edges={["top", "right", "left"]}>
-            <KeyboardAvoidingView
-              style={{ flex: 1 }}
-              behavior={Platform.OS === "ios" ? "padding" : "height"}
-            >
+          <KeyboardAvoidingView
+            style={{ flex: 1 }}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            keyboardVerticalOffset={Platform.OS === "ios" ? 50 : -100}
+          >
+            <SafeAreaView style={{ flex: 1 }} edges={["top", "bottom", "right", "left"]}>
               <Slot />
-            </KeyboardAvoidingView>
-          </SafeAreaView>
+            </SafeAreaView>
+          </KeyboardAvoidingView>
         </SafeAreaProvider>
       </ThemeProvider>
     </AuthProvider>
