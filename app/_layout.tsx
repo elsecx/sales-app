@@ -3,10 +3,10 @@ import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native
 import { useFonts } from 'expo-font';
 import { Slot } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
+import { StatusBar } from "expo-status-bar";
 import { useEffect } from 'react';
 import { KeyboardAvoidingView, Platform } from 'react-native';
 import 'react-native-reanimated';
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 import { AuthProvider } from '@/contexts/AuthContext';
 import { useColorScheme } from '@/hooks/useColorScheme';
@@ -49,17 +49,14 @@ function RootLayoutNav() {
   return (
     <AuthProvider>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <SafeAreaProvider>
-          <KeyboardAvoidingView
-            style={{ flex: 1 }}
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            keyboardVerticalOffset={Platform.OS === "ios" ? 50 : -100}
-          >
-            <SafeAreaView style={{ flex: 1 }} edges={["top", "bottom", "right", "left"]}>
-              <Slot />
-            </SafeAreaView>
-          </KeyboardAvoidingView>
-        </SafeAreaProvider>
+        <KeyboardAvoidingView
+          style={{ flex: 1 }}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          keyboardVerticalOffset={Platform.OS === "ios" ? 50 : -100}
+        >
+          <Slot />
+          <StatusBar style="auto" />
+        </KeyboardAvoidingView>
       </ThemeProvider>
     </AuthProvider>
   );
