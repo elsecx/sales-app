@@ -8,7 +8,7 @@ import { createInputStyles } from "./styles";
 export type InputStatus = "basic" | "primary" | "success" | "warning" | "danger";
 export type InputSize = "small" | "medium" | "large";
 
-type InputProps = TextInputProps & {
+export type InputProps = TextInputProps & {
   label?: string | (() => ReactNode);
   caption?: string | (() => ReactNode);
   status?: InputStatus;

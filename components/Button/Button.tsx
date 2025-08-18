@@ -9,7 +9,7 @@ export type ButtonStatus = "basic" | "primary" | "success" | "warning" | "danger
 export type ButtonSize = "small" | "medium" | "large";
 export type ButtonAppearance = "filled" | "outline" | "ghost";
 
-type ButtonProps = {
+export type ButtonProps = {
   children: string | ReactNode;
   status?: ButtonStatus;
   size?: ButtonSize;
