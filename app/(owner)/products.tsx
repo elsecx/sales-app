@@ -3,12 +3,12 @@ import { StyleSheet } from "react-native";
 import EmptyScreen from "@/components/EmptyScreen";
 import { Text, View } from "@/components/Themed";
 
-export default function TabIndexScreen() {
+export default function TabProductsScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab Index</Text>
+      <Text style={styles.title}>Tab Products</Text>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EmptyScreen path="app/index.tsx" />
+      <EmptyScreen path="app/(owner)/products.tsx" />
     </View>
   );
 }
