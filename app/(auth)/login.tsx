@@ -2,6 +2,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { router } from "expo-router";
 import { useState } from "react";
 
+import { Alert } from "@/components/Alert";
 import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
 import { Text, View } from "@/components/Themed";
@@ -43,13 +44,22 @@ export default function LoginScreen() {
       <Text style={styles.title}>Sign In</Text>
 
       <View style={styles.formContainer}>
+        {error && (
+          <Alert
+            visible={!!error}
+            status="danger"
+            appearance="outline"
+            onClose={() => setError(null)}
+            closable
+          >
+            {error}
+          </Alert>
+        )}
         <Input
           label="Username"
           placeholder="Masukkan username anda"
           value={username}
           onChangeText={setUsername}
-          status={error ? "danger" : "basic"}
-          caption={error ? error : ""}
         />
         <Input
           label="Kata sandi"
@@ -57,8 +67,6 @@ export default function LoginScreen() {
           value={password}
           onChangeText={setPassword}
           secureTextEntry={secureText}
-          status={error ? "danger" : "basic"}
-          caption={error ? error : ""}
           accessoryRight={() => (
             <FontAwesome
               name={secureText ? "eye" : "eye-slash"}
