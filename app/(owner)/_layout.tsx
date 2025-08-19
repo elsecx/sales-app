@@ -109,7 +109,7 @@ export default function OwnerLayout() {
         }}
       />
       <Tabs.Screen
-        name="employee"
+        name="employees"
         options={{
           title: "Pegawai",
           tabBarIcon: ({ color, size }) => (
