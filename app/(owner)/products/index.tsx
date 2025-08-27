@@ -7,6 +7,7 @@ import { Product, products } from "@/data/products";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { formatCurrencyID } from "@/utils/helpers";
 import { FontAwesome } from "@expo/vector-icons";
+import { router } from "expo-router";
 import { ActivityIndicator } from "react-native";
 import { createProductsStyles } from "./styles";
 
@@ -39,7 +40,7 @@ export default function TabProductsScreen() {
     <ListItem
       title={item.name}
       description={item.category}
-      onPress={() => console.log(item.name + "clicked")}
+      onPress={() => router.push(`/products/${item.id}`)}
       accessoryRight={() => (
         <View style={styles.accessoryRightContainer}>
           <Text style={styles.textStock}>

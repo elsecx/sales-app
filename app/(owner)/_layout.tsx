@@ -43,9 +43,7 @@ export default function OwnerLayout() {
         name="index"
         options={{
           title: "Dashboard",
-          tabBarIcon: ({ color, size }) => (
-            <FontAwesome name="home" size={size} color={color} />
-          ),
+          tabBarIcon: ({ color, size }) => <FontAwesome name="home" size={size} color={color} />,
           headerLeft: () => (
             <Link href="/login" asChild>
               <Pressable>
@@ -66,9 +64,7 @@ export default function OwnerLayout() {
         name="sales"
         options={{
           title: "Penjualan",
-          tabBarIcon: ({ color, size }) => (
-            <FontAwesome name="money" size={size} color={color} />
-          ),
+          tabBarIcon: ({ color, size }) => <FontAwesome name="money" size={size} color={color} />,
           headerLeft: () => (
             <Link href="/login" asChild>
               <Pressable>
@@ -91,39 +87,34 @@ export default function OwnerLayout() {
                     name="plus"
                     size={25}
                     color={Colors[colorScheme].text.default}
-                    style={{marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
                   />
                 )}
               </Pressable>
             </Link>
-          )
+          ),
         }}
       />
       <Tabs.Screen
         name="products"
         options={{
-          title: "Produk",
-          tabBarIcon: ({ color, size }) => (
-            <FontAwesome name="cubes" size={size} color={color} />
-          ),
+          headerShown: false,
+          title: "Daftar Produk",
+          tabBarIcon: ({ color, size }) => <FontAwesome name="cubes" size={size} color={color} />,
         }}
       />
       <Tabs.Screen
         name="employees"
         options={{
           title: "Pegawai",
-          tabBarIcon: ({ color, size }) => (
-            <FontAwesome name="users" size={size} color={color} />
-          ),
+          tabBarIcon: ({ color, size }) => <FontAwesome name="users" size={size} color={color} />,
         }}
       />
       <Tabs.Screen
         name="shops"
         options={{
           title: "Toko",
-          tabBarIcon: ({ color, size }) => (
-            <FontAwesome name="shopping-basket" size={size} color={color} />
-          ),
+          tabBarIcon: ({ color, size }) => <FontAwesome name="shopping-basket" size={size} color={color} />,
         }}
       />
     </Tabs>

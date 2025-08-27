@@ -1,26 +1,6 @@
 import Colors from "@/constants/Colors";
 import { StyleSheet } from "react-native";
 
-export const createDashboardStyles = (theme: "light" | "dark") => {
-  const colors = Colors[theme];
-
-  return StyleSheet.create({
-    container: {
-      flex: 1,
-    },
-  });
-};
-
-export const createSalesStyles = (theme: "light" | "dark") => {
-  const colors = Colors[theme];
-
-  return StyleSheet.create({
-    container: {
-      flex: 1,
-    },
-  });
-};
-
 export const createProductsStyles = (theme: "light" | "dark") => {
   const colors = Colors[theme];
 
@@ -54,22 +34,19 @@ export const createProductsStyles = (theme: "light" | "dark") => {
   });
 };
 
-export const createEmployeesStyles = (theme: "light" | "dark") => {
+export const createProductDetailStyles = (theme: "light" | "dark") => {
   const colors = Colors[theme];
 
   return StyleSheet.create({
     container: {
       flex: 1,
+      backgroundColor: colors.background,
+      padding: 15,
     },
-  });
-};
 
-export const createShopsStyles = (theme: "light" | "dark") => {
-  const colors = Colors[theme];
-
-  return StyleSheet.create({
-    container: {
-      flex: 1,
+    formContainer: {
+      flexDirection: "column",
+      gap: 20,
     },
   });
 };
