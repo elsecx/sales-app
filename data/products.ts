@@ -35,66 +35,14 @@ const categories: Category[] = [
 const units: Unit[] = ["Ikat", "Kg", "Lusin", "Pcs", "Pack"];
 
 const productNames: Record<Category, string[]> = {
-  Sayuran: [
-    "Bayam",
-    "Kangkung",
-    "Wortel",
-    "Kentang",
-    "Tomat",
-    "Kubis",
-    "Sawi"
-  ],
-  "Buah-buahan": [
-    "Apel",
-    "Jeruk",
-    "Pisang",
-    "Mangga",
-    "Semangka",
-    "Melon",
-    "Anggur"
-  ],
-  "Hasil laut": [
-    "Ikan Kembung",
-    "Udang",
-    "Cumi-cumi",
-    "Kepiting",
-    "Ikan Salmon"
-  ],
-  Daging: [
-    "Daging Sapi",
-    "Daging Ayam",
-    "Daging Kambing",
-    "Telur Ayam",
-    "Sosis"
-  ],
-  "Bumbu dapur": [
-    "Bawang Merah",
-    "Bawang Putih",
-    "Cabai",
-    "Jahe",
-    "Lengkuas"
-  ],
-  Minuman: [
-    "Air Mineral",
-    "Teh Botol",
-    "Kopi Sachet",
-    "Susu UHT",
-    "Jus Buah"
-  ],
-  "Makanan kering": [
-    "Kerupuk",
-    "Kacang",
-    "Biskuit",
-    "Mie Instan",
-    "Snack Jagung"
-  ],
-  "Produk olahan": [
-    "Tempe",
-    "Tahu",
-    "Nugget",
-    "Bakso",
-    "Abon"
-  ]
+  Sayuran: ["Bayam", "Kangkung", "Wortel", "Kentang", "Tomat", "Kubis", "Sawi"],
+  "Buah-buahan": ["Apel", "Jeruk", "Pisang", "Mangga", "Semangka", "Melon", "Anggur"],
+  "Hasil laut": ["Ikan Kembung", "Udang", "Cumi-cumi", "Kepiting", "Ikan Salmon"],
+  Daging: ["Daging Sapi", "Daging Ayam", "Daging Kambing", "Telur Ayam", "Sosis"],
+  "Bumbu dapur": ["Bawang Merah", "Bawang Putih", "Cabai", "Jahe", "Lengkuas"],
+  Minuman: ["Air Mineral", "Teh Botol", "Kopi Sachet", "Susu UHT", "Jus Buah"],
+  "Makanan kering": ["Kerupuk", "Kacang", "Biskuit", "Mie Instan", "Snack Jagung"],
+  "Produk olahan": ["Tempe", "Tahu", "Nugget", "Bakso", "Abon"],
 };
 
 function randomUnit(): Unit {
@@ -139,12 +87,9 @@ categories.forEach((cat) => {
   });
 });
 
-while (products.length < 50) {
+while (products.length < 100) {
   const randomCat = categories[Math.floor(Math.random() * categories.length)];
-  const baseName =
-    productNames[randomCat][
-      Math.floor(Math.random() * productNames[randomCat].length)
-    ];
+  const baseName = productNames[randomCat][Math.floor(Math.random() * productNames[randomCat].length)];
   products.push({
     id: generateRandomId(),
     name: `${baseName} Premium`,

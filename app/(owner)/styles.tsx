@@ -39,6 +39,18 @@ export const createProductsStyles = (theme: "light" | "dark") => {
     search: {
       flex: 1,
     },
+    accessoryRightContainer: {
+      alignItems: "flex-end",
+    },
+    textStock: {
+      fontWeight: 600,
+      color: colors.text.hint,
+    },
+    textPrice: {
+      fontWeight: 800,
+      color: colors.success.default,
+      fontSize: 18,
+    },
   });
 };
 

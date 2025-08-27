@@ -6,7 +6,7 @@ export const createListStyles = (theme: "light" | "dark") => {
 
   return StyleSheet.create({
     contentContainer: {
-      flex: 1,
+      //
     },
     separator: {
       height: StyleSheet.hairlineWidth,
