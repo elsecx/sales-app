@@ -7,6 +7,7 @@ import { Product, products } from "@/data/products";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { formatCurrencyID } from "@/utils/helpers";
 import { FontAwesome } from "@expo/vector-icons";
+import { useFocusEffect } from "@react-navigation/native";
 import { router } from "expo-router";
 import { ActivityIndicator } from "react-native";
 import { createProductsStyles } from "./styles";
@@ -20,6 +21,13 @@ export default function TabProductsScreen() {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+
+  useFocusEffect(
+    useCallback(() => {
+      setPage(1);
+      setVisibleData(products.slice(0, 10));
+    }, [])
+  );
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
