@@ -19,6 +19,16 @@ export default function TabProductsScreen() {
   const [visibleData, setVisibleData] = useState<Product[]>(products.slice(0, 10));
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setPage(1);
+      setVisibleData(products.slice(0, 10));
+      setRefreshing(false);
+    }, 800); // delay simulasi fetch
+  }, []);
 
   const loadMore = useCallback(() => {
     if (loading) return;
@@ -68,6 +78,8 @@ export default function TabProductsScreen() {
         data={filteredData}
         keyExtractor={(item) => item.id}
         renderItem={renderItem}
+        refreshing={refreshing}
+        onRefresh={onRefresh}
         onEndReached={loadMore}
         onEndReachedThreshold={0.5}
         ListFooterComponent={loading ? <ActivityIndicator style={{ margin: 16 }} /> : null}
