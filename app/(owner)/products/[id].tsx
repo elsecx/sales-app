@@ -197,8 +197,9 @@ export default function TabProductDetailScreen() {
         <Input
           label="Harga"
           value={form.price}
-          editable={isEditing}
+          keyboardType="numeric"
           onChangeText={(text) => setForm({ ...form, price: text })}
+          accessoryLeft={() => <Text>Rp</Text>}
         />
 
         <View style={styles.buttonContainer}>
