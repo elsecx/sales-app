@@ -31,8 +31,7 @@ export const createInputStyles = (theme: "light" | "dark", status: InputStatus, 
       paddingHorizontal: sizeConf.padding,
     },
     disabledWrapper: {
-      backgroundColor: colors.disabled,
-      opacity: 0.6,
+      opacity: 0.3,
     },
     input: {
       flex: 1,
