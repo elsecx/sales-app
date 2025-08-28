@@ -10,9 +10,8 @@ export const createInputIntegerStyles = (theme: "light" | "dark") => {
     },
     label: {
       fontSize: 16,
-      fontWeight: "500",
-      marginBottom: 8,
       color: colors.text.default,
+      marginBottom: 10,
     },
     inputContainer: {
       flexDirection: "row",
