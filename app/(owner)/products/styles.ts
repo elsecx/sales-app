@@ -43,10 +43,14 @@ export const createProductDetailStyles = (theme: "light" | "dark") => {
       backgroundColor: colors.background,
       padding: 15,
     },
-
     formContainer: {
       flexDirection: "column",
       gap: 20,
+    },
+    label: {
+      fontSize: 16,
+      color: colors.text.default,
+      marginBottom: 10,
     },
   });
 };

@@ -1,3 +1,4 @@
+import { Picker } from "@react-native-picker/picker";
 import { useLocalSearchParams } from "expo-router";
 import React, { useState } from "react";
 import { ScrollView } from "react-native";
@@ -6,7 +7,7 @@ import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
 import { InputInteger } from "@/components/InputInteger";
 import { Text, View } from "@/components/Themed";
-import { products } from "@/data/products";
+import { categories, Category, products } from "@/data/products";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { createProductDetailStyles } from "./styles";
 
@@ -23,6 +24,7 @@ export default function TabProductDetailScreen() {
   // simpan state form biar bisa diubah saat edit
   const [form, setForm] = useState({
     name: product?.name ?? "",
+    category: product?.category ?? ("Sayuran" as Category),
     stock: product?.stock ?? 0,
     unit: product?.unit ?? "",
     price: String(product?.price ?? ""),
@@ -60,6 +62,19 @@ export default function TabProductDetailScreen() {
           editable={isEditing}
           onChangeText={(text) => setForm({ ...form, name: text })}
         />
+
+        <View>
+          <Text style={styles.label}>Kategori</Text>
+          <Picker
+            enabled={isEditing}
+            selectedValue={form.category}
+            onValueChange={(val) => setForm({ ...form, category: val as Category })}
+          >
+            {categories.map((c) => (
+              <Picker.Item key={c} label={c} value={c} />
+            ))}
+          </Picker>
+        </View>
 
         <InputInteger
           label="Stok"

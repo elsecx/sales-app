@@ -21,7 +21,7 @@ export type Product = {
   unit: Unit;
 };
 
-const categories: Category[] = [
+export const categories: Category[] = [
   "Sayuran",
   "Buah-buahan",
   "Hasil laut",
