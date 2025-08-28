@@ -99,7 +99,6 @@ export default function OwnerLayout() {
         name="products"
         options={{
           headerShown: false,
-          title: "Daftar Produk",
           tabBarIcon: ({ color, size }) => <FontAwesome name="cubes" size={size} color={color} />,
         }}
       />
