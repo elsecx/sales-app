@@ -5,6 +5,7 @@ export type Employee = {
   name: string;
   phone: string;
   address: string;
+  status: boolean;
   joinedAt: Date;
 };
 
@@ -84,6 +85,10 @@ function randomName(): string {
   return `${first} ${last}`;
 }
 
+function randomStatus(): boolean {
+  return Math.random() < 0.7;
+}
+
 export const employees: Employee[] = [];
 
 for (let i = 0; i < 100; i++) {
@@ -92,6 +97,7 @@ for (let i = 0; i < 100; i++) {
     name: randomName(),
     phone: randomPhone(),
     address: randomAddress(),
+    status: randomStatus(),
     joinedAt: randomDateWithinYear(),
   });
 }
