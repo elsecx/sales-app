@@ -77,6 +77,35 @@ export default function TabProductDetailScreen() {
     }
   };
 
+  const handleDelete = () => {
+    Alert.alert("Konfirmasi", "Yakin ingin menghapus produk ini?", [
+      { text: "Batal", style: "cancel" },
+      {
+        text: "Hapus",
+        style: "destructive",
+        onPress: () => {
+          setLoading(true);
+
+          setTimeout(() => {
+            const index = products.findIndex((p) => p.id === id);
+            if (index !== -1) {
+              products.splice(index, 1);
+            }
+
+            setLoading(false);
+
+            Alert.alert("Berhasil", "Produk berhasil dihapus.", [
+              {
+                text: "OK",
+                onPress: () => router.back(),
+              },
+            ]);
+          }, 600); // delay simulasi
+        },
+      },
+    ]);
+  };
+
   const handleReset = () => {
     setForm({
       name: product?.name ?? "",
@@ -176,11 +205,15 @@ export default function TabProductDetailScreen() {
           <Button status="primary" appearance="filled" loading={loading} disabled={loading} onPress={handleEdit}>
             {isEditing ? "Simpan" : "Edit"}
           </Button>
-          {isEditing && (
-            <Button status="basic" appearance="filled" disabled={loading} onPress={handleCancel}>
-              Batal
-            </Button>
-          )}
+
+          <Button
+            status={isEditing ? "basic" : "danger"}
+            appearance="filled"
+            disabled={loading}
+            onPress={isEditing ? handleCancel : handleDelete}
+          >
+            {isEditing ? "Batal" : "Hapus"}
+          </Button>
         </View>
       </View>
     </ScrollView>
