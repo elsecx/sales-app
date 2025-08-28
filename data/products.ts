@@ -32,7 +32,7 @@ export const categories: Category[] = [
   "Produk olahan",
 ];
 
-const units: Unit[] = ["Ikat", "Kg", "Lusin", "Pcs", "Pack"];
+export const units: Unit[] = ["Ikat", "Kg", "Lusin", "Pcs", "Pack"];
 
 const productNames: Record<Category, string[]> = {
   Sayuran: ["Bayam", "Kangkung", "Wortel", "Kentang", "Tomat", "Kubis", "Sawi"],

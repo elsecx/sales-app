@@ -7,7 +7,7 @@ import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
 import { InputInteger } from "@/components/InputInteger";
 import { Text, View } from "@/components/Themed";
-import { categories, Category, products } from "@/data/products";
+import { categories, Category, products, Unit, units } from "@/data/products";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { createProductDetailStyles } from "./styles";
 
@@ -25,7 +25,7 @@ export default function TabProductDetailScreen() {
     name: product?.name ?? "",
     category: product?.category ?? ("Sayuran" as Category),
     stock: product?.stock ?? 0,
-    unit: product?.unit ?? "",
+    unit: product?.unit ?? ("Kg" as Unit),
     price: String(product?.price ?? ""),
   });
 
@@ -48,7 +48,7 @@ export default function TabProductDetailScreen() {
       name: product?.name ?? "",
       category: product?.category ?? ("Sayuran" as Category),
       stock: product?.stock ?? 0,
-      unit: product?.unit ?? "",
+      unit: product?.unit ?? ("Kg" as Unit),
       price: String(product?.price ?? ""),
     });
     setIsEditing(false);
@@ -118,12 +118,18 @@ export default function TabProductDetailScreen() {
           showControls
         />
 
-        <Input
-          label="Satuan"
-          value={form.unit}
-          editable={isEditing}
-          onChangeText={(text) => setForm({ ...form, unit: text })}
-        />
+        <View>
+          <Text style={styles.label}>Satuan</Text>
+          <Picker
+            enabled={isEditing}
+            selectedValue={form.unit}
+            onValueChange={(val) => setForm({ ...form, unit: val })}
+          >
+            {units.map((u) => (
+              <Picker.Item key={u} label={u} value={u} />
+            ))}
+          </Picker>
+        </View>
 
         <Input
           label="Harga"
