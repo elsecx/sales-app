@@ -105,7 +105,7 @@ export default function OwnerLayout() {
       <Tabs.Screen
         name="employees"
         options={{
-          title: "Pegawai",
+          headerShown: false,
           tabBarIcon: ({ color, size }) => <FontAwesome name="users" size={size} color={color} />,
         }}
       />
