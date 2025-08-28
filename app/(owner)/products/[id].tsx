@@ -1,7 +1,7 @@
 import { Picker } from "@react-native-picker/picker";
 import { useLocalSearchParams } from "expo-router";
 import React, { useState } from "react";
-import { ScrollView } from "react-native";
+import { Alert, ScrollView } from "react-native";
 
 import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
@@ -21,7 +21,6 @@ export default function TabProductDetailScreen() {
   const [loading, setLoading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
-  // simpan state form biar bisa diubah saat edit
   const [form, setForm] = useState({
     name: product?.name ?? "",
     category: product?.category ?? ("Sayuran" as Category),
@@ -30,7 +29,7 @@ export default function TabProductDetailScreen() {
     price: String(product?.price ?? ""),
   });
 
-  const handleToggleEdit = () => {
+  const handleEdit = () => {
     if (isEditing) {
       setLoading(true);
 
@@ -41,6 +40,39 @@ export default function TabProductDetailScreen() {
       }, 1000);
     } else {
       setIsEditing(true);
+    }
+  };
+
+  const handleRestore = () => {
+    setForm({
+      name: product?.name ?? "",
+      category: product?.category ?? ("Sayuran" as Category),
+      stock: product?.stock ?? 0,
+      unit: product?.unit ?? "",
+      price: String(product?.price ?? ""),
+    });
+    setIsEditing(false);
+  };
+
+  const hasChanges = () => {
+    if (!product) return false;
+    return (
+      form.name !== product.name ||
+      form.category !== product.category ||
+      form.stock !== product.stock ||
+      form.unit !== product.unit ||
+      form.price !== String(product.price)
+    );
+  };
+
+  const handleCancel = () => {
+    if (isEditing && hasChanges()) {
+      Alert.alert("Konfirmasi", "Data yang sudah diisi akan hilang. Yakin ingin membatalkan?", [
+        { text: "Batal", style: "cancel" },
+        { text: "Ya, batalkan", style: "destructive", onPress: () => handleRestore() },
+      ]);
+    } else {
+      setIsEditing(false);
     }
   };
 
@@ -100,9 +132,16 @@ export default function TabProductDetailScreen() {
           onChangeText={(text) => setForm({ ...form, price: text })}
         />
 
-        <Button status="primary" appearance="filled" loading={loading} disabled={loading} onPress={handleToggleEdit}>
-          {isEditing ? "Simpan" : "Edit"}
-        </Button>
+        <View style={styles.buttonContainer}>
+          <Button status="primary" appearance="filled" loading={loading} disabled={loading} onPress={handleEdit}>
+            {isEditing ? "Simpan" : "Edit"}
+          </Button>
+          {isEditing && (
+            <Button status="basic" appearance="filled" disabled={loading} onPress={handleCancel}>
+              Batal
+            </Button>
+          )}
+        </View>
       </View>
     </ScrollView>
   );

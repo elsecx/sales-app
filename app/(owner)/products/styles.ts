@@ -45,12 +45,15 @@ export const createProductDetailStyles = (theme: "light" | "dark") => {
     },
     formContainer: {
       flexDirection: "column",
-      gap: 20,
+      gap: 15,
     },
     label: {
       fontSize: 16,
       color: colors.text.default,
       marginBottom: 10,
+    },
+    buttonContainer: {
+      gap: 15,
     },
   });
 };

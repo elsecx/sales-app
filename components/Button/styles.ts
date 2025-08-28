@@ -23,7 +23,7 @@ export const createButtonStyles = (
   switch (appearance) {
     case "filled":
       backgroundColor = colors[status].default;
-      textColor = colors.text.alternative;
+      textColor = status === "basic" ? colors.text.default : colors.text.alternative;
       break;
     case "outline":
       backgroundColor = colors[status].transparent;
