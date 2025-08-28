@@ -4,6 +4,7 @@ import { ScrollView } from "react-native";
 
 import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
+import { InputInteger } from "@/components/InputInteger";
 import { Text, View } from "@/components/Themed";
 import { products } from "@/data/products";
 import { useColorScheme } from "@/hooks/useColorScheme";
@@ -22,7 +23,7 @@ export default function TabProductDetailScreen() {
   // simpan state form biar bisa diubah saat edit
   const [form, setForm] = useState({
     name: product?.name ?? "",
-    stock: String(product?.stock ?? ""),
+    stock: product?.stock ?? 0,
     unit: product?.unit ?? "",
     price: String(product?.price ?? ""),
   });
@@ -60,11 +61,14 @@ export default function TabProductDetailScreen() {
           onChangeText={(text) => setForm({ ...form, name: text })}
         />
 
-        <Input
+        <InputInteger
           label="Stok"
           value={form.stock}
+          onValueChange={(val) => setForm({ ...form, stock: val })}
+          min={0}
+          max={9999}
           editable={isEditing}
-          onChangeText={(text) => setForm({ ...form, stock: text })}
+          showControls
         />
 
         <Input
