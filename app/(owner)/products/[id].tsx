@@ -35,9 +35,24 @@ export default function TabProductDetailScreen() {
 
       setTimeout(() => {
         console.log("Data tersimpan:", form);
+
+        const index = products.findIndex((p) => p.id === id);
+        if (index !== -1) {
+          products[index] = {
+            ...products[index],
+            name: form.name,
+            category: form.category,
+            stock: form.stock,
+            unit: form.unit,
+            price: Number(form.price),
+          };
+        }
+
         setLoading(false);
         setIsEditing(false);
-      }, 1000);
+
+        Alert.alert("Berhasil", "Produk berhasil diperbarui.", [{ text: "OK" }], { cancelable: true });
+      }, 600); // delay simulasi fetch
     } else {
       setIsEditing(true);
     }
