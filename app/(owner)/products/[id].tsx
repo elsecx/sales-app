@@ -1,5 +1,5 @@
 import { Picker } from "@react-native-picker/picker";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import React, { useState } from "react";
 import { Alert, ScrollView } from "react-native";
 
@@ -51,7 +51,12 @@ export default function TabProductDetailScreen() {
         setLoading(false);
         setIsEditing(false);
 
-        Alert.alert("Berhasil", "Produk berhasil diperbarui.", [{ text: "OK" }], { cancelable: true });
+        Alert.alert("Berhasil", "Produk berhasil diperbarui.", [
+          {
+            text: "OK",
+            onPress: () => router.replace("/(owner)/products"),
+          },
+        ]);
       }, 600); // delay simulasi fetch
     } else {
       setIsEditing(true);
