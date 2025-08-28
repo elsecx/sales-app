@@ -18,3 +18,16 @@ export function formatCurrencyID(value: number | string, withPrefix: boolean = t
 
   return withPrefix ? formatted : formatted.replace("Rp", "").trim();
 }
+
+export function formatDateID(
+  date: Date | string | number,
+  options: Intl.DateTimeFormatOptions = { day: "2-digit", month: "long", year: "numeric" }
+): string {
+  if (!date) return "";
+
+  const d = typeof date === "string" || typeof date === "number" ? new Date(date) : date;
+
+  if (isNaN(d.getTime())) return "";
+
+  return new Intl.DateTimeFormat("id-ID", options).format(d);
+}
