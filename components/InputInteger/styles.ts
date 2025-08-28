@@ -17,6 +17,9 @@ export const createInputIntegerStyles = (theme: "light" | "dark") => {
       flexDirection: "row",
       alignItems: "center",
     },
+    inputDisabled: {
+      opacity: 0.3,
+    },
     input: {
       flex: 1,
       fontSize: 16,

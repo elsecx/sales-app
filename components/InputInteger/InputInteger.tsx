@@ -54,14 +54,14 @@ export default function InputInteger({
     <View style={[styles.container, style]}>
       {label && <Text style={styles.label}>{label}</Text>}
 
-      <View style={styles.inputContainer}>
+      <View style={[styles.inputContainer, !editable && styles.inputDisabled]}>
         {showControls && (
           <TouchableOpacity
             style={[styles.controlButton]}
             onPress={handleDecrement}
             disabled={!editable || value <= min}
           >
-            <Text style={[styles.controlText, value <= min && styles.controlDisabled]}>−</Text>
+            <Text style={[value <= min ? styles.controlDisabled : styles.controlText]}>−</Text>
           </TouchableOpacity>
         )}
 
@@ -83,7 +83,7 @@ export default function InputInteger({
             onPress={handleIncrement}
             disabled={!editable || value >= max}
           >
-            <Text style={[styles.controlText, value >= max && styles.controlDisabled]}>+</Text>
+            <Text style={[value >= max ? styles.controlDisabled : styles.controlText]}>+</Text>
           </TouchableOpacity>
         )}
       </View>
