@@ -54,7 +54,7 @@ export default function TabProductDetailScreen() {
         Alert.alert("Berhasil", "Produk berhasil diperbarui.", [
           {
             text: "OK",
-            onPress: () => router.replace("/(owner)/products"),
+            onPress: () => router.back(),
           },
         ]);
       }, 600); // delay simulasi fetch
