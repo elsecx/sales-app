@@ -27,7 +27,7 @@ export default function Input({
   accessoryRight,
   secureTextEntry,
   size = "medium",
-  editable = false,
+  editable = true,
   style,
   ...props
 }: InputProps) {
