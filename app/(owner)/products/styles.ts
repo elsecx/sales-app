@@ -21,15 +21,20 @@ export const createProductsStyles = (theme: "light" | "dark") => {
     },
     accessoryRightContainer: {
       alignItems: "flex-end",
+      gap: 5,
     },
-    textStock: {
-      fontWeight: 600,
-      color: colors.text.hint,
+    textCategory: {
+      fontWeight: "bold",
+      color: colors.text.default,
     },
     textPrice: {
       fontWeight: 800,
-      color: colors.success.default,
       fontSize: 18,
+      paddingVertical: 2,
+      paddingHorizontal: 5,
+      borderRadius: 5,
+      color: colors.success.active,
+      backgroundColor: colors.success.transparent,
     },
   });
 };

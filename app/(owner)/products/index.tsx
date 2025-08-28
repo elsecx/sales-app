@@ -57,13 +57,11 @@ export default function TabProductsScreen() {
   const renderItem = ({ item }: { item: any }): React.ReactElement => (
     <ListItem
       title={item.name}
-      description={item.category}
+      description={`Stok: ${item.stock} ${item.unit}`}
       onPress={() => router.push(`/products/${item.id}`)}
       accessoryRight={() => (
         <View style={styles.accessoryRightContainer}>
-          <Text style={styles.textStock}>
-            Stok: {item.stock} {item.unit}
-          </Text>
+          <Text style={styles.textCategory}>{item.category}</Text>
           <Text style={styles.textPrice}>{formatCurrencyID(item.price)}</Text>
         </View>
       )}
