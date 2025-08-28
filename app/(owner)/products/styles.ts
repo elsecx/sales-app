@@ -40,6 +40,7 @@ export const createProductDetailStyles = (theme: "light" | "dark") => {
   return StyleSheet.create({
     container: {
       flex: 1,
+      flexDirection: "column",
       backgroundColor: colors.background,
       padding: 15,
     },

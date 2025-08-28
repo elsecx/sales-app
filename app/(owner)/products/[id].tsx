@@ -31,8 +31,22 @@ export default function TabProductDetailScreen() {
 
   const handleEdit = () => {
     if (isEditing) {
-      setLoading(true);
+      if (!form.name || !form.category || !form.stock || !form.unit || !form.price) {
+        Alert.alert("Error", "Semua field wajib diisi!");
+        return;
+      }
 
+      if (isNaN(form.stock) || form.stock <= 0) {
+        Alert.alert("Error", "Stok harus berupa angka lebih dari 0!");
+        return;
+      }
+
+      if (!/^\d+$/.test(form.price) || parseInt(form.price, 10) <= 0) {
+        Alert.alert("Validasi", "Harga harus berupa angka lebih dari 0!");
+        return;
+      }
+
+      setLoading(true);
       setTimeout(() => {
         console.log("Data tersimpan:", form);
 
@@ -63,7 +77,7 @@ export default function TabProductDetailScreen() {
     }
   };
 
-  const handleRestore = () => {
+  const handleReset = () => {
     setForm({
       name: product?.name ?? "",
       category: product?.category ?? ("Sayuran" as Category),
@@ -89,7 +103,7 @@ export default function TabProductDetailScreen() {
     if (isEditing && hasChanges()) {
       Alert.alert("Konfirmasi", "Data yang sudah diisi akan hilang. Yakin ingin membatalkan?", [
         { text: "Batal", style: "cancel" },
-        { text: "Ya, batalkan", style: "destructive", onPress: () => handleRestore() },
+        { text: "Ya, batalkan", style: "destructive", onPress: () => handleReset() },
       ]);
     } else {
       setIsEditing(false);
