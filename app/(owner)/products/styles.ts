@@ -64,8 +64,16 @@ export const createNewProductStyles = (theme: "light" | "dark") => {
   return StyleSheet.create({
     container: {
       flex: 1,
+      flexDirection: "column",
       backgroundColor: colors.background,
       padding: 15,
+    },
+    formContainer: {
+      flexDirection: "column",
+      gap: 15,
+    },
+    buttonContainer: {
+      gap: 15,
     },
   });
 };
