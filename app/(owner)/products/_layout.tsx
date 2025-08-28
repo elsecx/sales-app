@@ -15,7 +15,7 @@ export default function ProductsLayout() {
         options={{
           title: "Daftar Produk",
           headerRight: () => (
-            <Link href="/login" asChild>
+            <Link href="/products/new" asChild>
               <Pressable>
                 {({ pressed }) => (
                   <FontAwesome
@@ -31,6 +31,7 @@ export default function ProductsLayout() {
         }}
       />
       <Stack.Screen name="[id]" options={{ title: "Detail Produk" }} />
+      <Stack.Screen name="new" options={{ title: "Tambah Produk" }} />
     </Stack>
   );
 }

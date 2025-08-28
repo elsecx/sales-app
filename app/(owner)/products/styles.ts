@@ -57,3 +57,15 @@ export const createProductDetailStyles = (theme: "light" | "dark") => {
     },
   });
 };
+
+export const createNewProductStyles = (theme: "light" | "dark") => {
+  const colors = Colors[theme];
+
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.background,
+      padding: 15,
+    },
+  });
+};
