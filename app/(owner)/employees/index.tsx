@@ -9,7 +9,6 @@ import { List, ListItem } from "@/components/List";
 import { Text, View } from "@/components/Themed";
 import { Employee, employees } from "@/data/employees";
 import { useColorScheme } from "@/hooks/useColorScheme";
-import { formatDateID } from "@/utils/helpers";
 import { createEmployeesStyles } from "./styles";
 
 export default function TabEmployeesScreen() {
@@ -61,8 +60,9 @@ export default function TabEmployeesScreen() {
       onPress={() => router.push(`/products/${item.id}`)}
       accessoryRight={() => (
         <View style={styles.accessoryRightContainer}>
-          <Text style={styles.joinedAtLabel}>Bergabung</Text>
-          <Text style={styles.joinedAtValue}>{formatDateID(item.joinedAt)}</Text>
+          <Text style={[styles.status, item.status ? styles.statusActive : styles.statusInactive]}>
+            {item.status ? "Status Aktif" : "Status Tidak Aktif"}
+          </Text>
         </View>
       )}
     />

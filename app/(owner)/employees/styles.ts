@@ -22,13 +22,20 @@ export const createEmployeesStyles = (theme: "light" | "dark") => {
     accessoryRightContainer: {
       alignItems: "flex-end",
     },
-    joinedAtLabel: {
+    status: {
       fontWeight: "bold",
-      color: colors.success.default,
+      fontSize: 12,
+      paddingVertical: 2,
+      paddingHorizontal: 5,
+      borderRadius: 5,
     },
-    joinedAtValue: {
-      fontWeight: "normal",
-      color: colors.text.hint,
+    statusActive: {
+      color: colors.success.active,
+      backgroundColor: colors.success.transparent,
+    },
+    statusInactive: {
+      color: colors.danger.active,
+      backgroundColor: colors.danger.transparent,
     },
   });
 };
