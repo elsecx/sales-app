@@ -63,36 +63,8 @@ export default function OwnerLayout() {
       <Tabs.Screen
         name="sales"
         options={{
-          title: "Penjualan",
+          headerShown: false,
           tabBarIcon: ({ color, size }) => <FontAwesome name="money" size={size} color={color} />,
-          headerLeft: () => (
-            <Link href="/login" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="calendar"
-                    size={25}
-                    color={Colors[colorScheme].text.default}
-                    style={{ marginLeft: 15, marginRight: 10, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
-          ),
-          headerRight: () => (
-            <Link href="/login" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="plus"
-                    size={25}
-                    color={Colors[colorScheme].text.default}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
-          ),
         }}
       />
       <Tabs.Screen
