@@ -148,7 +148,7 @@ export default function TabProductDetailScreen() {
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.formContainer}>
         <Input
           label="Nama Produk"
@@ -198,6 +198,7 @@ export default function TabProductDetailScreen() {
           label="Harga"
           value={form.price}
           keyboardType="numeric"
+          editable={isEditing}
           onChangeText={(text) => setForm({ ...form, price: text })}
           accessoryLeft={() => <Text>Rp</Text>}
         />
