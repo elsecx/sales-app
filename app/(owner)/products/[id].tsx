@@ -15,13 +15,12 @@ export default function TabProductDetailScreen() {
   const colorScheme = useColorScheme() ?? "light";
   const styles = createProductDetailStyles(colorScheme);
 
+  // Get product ID from route params
   const { id } = useLocalSearchParams<{ id: string }>();
   const product = products.find((p) => p.id === id);
 
-  const [loading, setLoading] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-
-  const [form, setForm] = useState({
+  // Initial form state
+  const initForm = () => ({
     name: product?.name ?? "",
     category: product?.category ?? ("Sayuran" as Category),
     stock: product?.stock ?? 0,
@@ -29,27 +28,40 @@ export default function TabProductDetailScreen() {
     price: String(product?.price ?? ""),
   });
 
+  const [form, setForm] = useState(initForm);
+  const [loading, setLoading] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+
+  // Helper to update form state
+  const updateForm = (key: keyof typeof form, value: any) => setForm((prev) => ({ ...prev, [key]: value }));
+
+  // Validate form before saving
+  const validateForm = () => {
+    if (!form.name || !form.category || !form.stock || !form.unit || !form.price) {
+      Alert.alert("Error", "Semua field wajib diisi!");
+      return false;
+    }
+
+    if (isNaN(form.stock) || form.stock <= 0) {
+      Alert.alert("Error", "Stok harus berupa angka lebih dari 0!");
+      return false;
+    }
+
+    if (!/^\d+$/.test(form.price) || parseInt(form.price, 10) <= 0) {
+      Alert.alert("Validasi", "Harga harus berupa angka lebih dari 0!");
+      return false;
+    }
+
+    return true;
+  };
+
+  // Handler for Edit / Save button (dummy)
   const handleEdit = () => {
     if (isEditing) {
-      if (!form.name || !form.category || !form.stock || !form.unit || !form.price) {
-        Alert.alert("Error", "Semua field wajib diisi!");
-        return;
-      }
-
-      if (isNaN(form.stock) || form.stock <= 0) {
-        Alert.alert("Error", "Stok harus berupa angka lebih dari 0!");
-        return;
-      }
-
-      if (!/^\d+$/.test(form.price) || parseInt(form.price, 10) <= 0) {
-        Alert.alert("Validasi", "Harga harus berupa angka lebih dari 0!");
-        return;
-      }
+      if (!validateForm()) return;
 
       setLoading(true);
       setTimeout(() => {
-        console.log("Data tersimpan:", form);
-
         const index = products.findIndex((p) => p.id === id);
         if (index !== -1) {
           products[index] = {
@@ -65,18 +77,14 @@ export default function TabProductDetailScreen() {
         setLoading(false);
         setIsEditing(false);
 
-        Alert.alert("Berhasil", "Produk berhasil diperbarui.", [
-          {
-            text: "OK",
-            onPress: () => router.back(),
-          },
-        ]);
-      }, 600); // delay simulasi fetch
+        Alert.alert("Berhasil", "Produk berhasil diperbarui.", [{ text: "OK", onPress: () => router.back() }]);
+      }, 600); // Simulate network request
     } else {
       setIsEditing(true);
     }
   };
 
+  // Handler for Delete button (dummy)
   const handleDelete = () => {
     Alert.alert("Konfirmasi", "Yakin ingin menghapus produk ini?", [
       { text: "Batal", style: "cancel" },
@@ -85,60 +93,46 @@ export default function TabProductDetailScreen() {
         style: "destructive",
         onPress: () => {
           setLoading(true);
-
           setTimeout(() => {
             const index = products.findIndex((p) => p.id === id);
-            if (index !== -1) {
-              products.splice(index, 1);
-            }
+            if (index !== -1) products.splice(index, 1);
 
             setLoading(false);
-
-            Alert.alert("Berhasil", "Produk berhasil dihapus.", [
-              {
-                text: "OK",
-                onPress: () => router.back(),
-              },
-            ]);
-          }, 600); // delay simulasi
+            Alert.alert("Berhasil", "Produk berhasil dihapus.", [{ text: "OK", onPress: () => router.back() }]);
+          }, 600); // Simulate network request
         },
       },
     ]);
   };
 
+  // Reset form to initial state
   const handleReset = () => {
-    setForm({
-      name: product?.name ?? "",
-      category: product?.category ?? ("Sayuran" as Category),
-      stock: product?.stock ?? 0,
-      unit: product?.unit ?? ("Kg" as Unit),
-      price: String(product?.price ?? ""),
-    });
+    setForm(initForm());
     setIsEditing(false);
   };
 
-  const hasChanges = () => {
-    if (!product) return false;
-    return (
-      form.name !== product.name ||
+  // Check if form has unsaved changes
+  const hasChanges = () =>
+    product &&
+    (form.name !== product.name ||
       form.category !== product.category ||
       form.stock !== product.stock ||
       form.unit !== product.unit ||
-      form.price !== String(product.price)
-    );
-  };
+      form.price !== String(product.price));
 
+  // Handler for Cancel button
   const handleCancel = () => {
     if (isEditing && hasChanges()) {
       Alert.alert("Konfirmasi", "Data yang sudah diisi akan hilang. Yakin ingin membatalkan?", [
         { text: "Batal", style: "cancel" },
-        { text: "Ya, batalkan", style: "destructive", onPress: () => handleReset() },
+        { text: "Ya, batalkan", style: "destructive", onPress: handleReset },
       ]);
     } else {
       setIsEditing(false);
     }
   };
 
+  // Return early if product not found
   if (!product) {
     return (
       <View style={styles.container}>
@@ -150,20 +144,22 @@ export default function TabProductDetailScreen() {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.formContainer}>
+        {/* Product Name */}
         <Input
           label="Nama Produk"
           placeholder="Masukkan nama produk"
           value={form.name}
           editable={isEditing}
-          onChangeText={(text) => setForm({ ...form, name: text })}
+          onChangeText={(text) => updateForm("name", text)}
         />
 
+        {/* Category Picker */}
         <View>
           <Text style={styles.label}>Kategori</Text>
           <Picker
             enabled={isEditing}
             selectedValue={form.category}
-            onValueChange={(val) => setForm({ ...form, category: val as Category })}
+            onValueChange={(val) => updateForm("category", val as Category)}
           >
             {categories.map((c) => (
               <Picker.Item key={c} label={c} value={c} />
@@ -171,38 +167,38 @@ export default function TabProductDetailScreen() {
           </Picker>
         </View>
 
+        {/* Stock Input */}
         <InputInteger
           label="Stok"
           value={form.stock}
-          onValueChange={(val) => setForm({ ...form, stock: val })}
+          onValueChange={(val) => updateForm("stock", val)}
           min={0}
           max={9999}
           editable={isEditing}
           showControls
         />
 
+        {/* Unit Picker */}
         <View>
           <Text style={styles.label}>Satuan</Text>
-          <Picker
-            enabled={isEditing}
-            selectedValue={form.unit}
-            onValueChange={(val) => setForm({ ...form, unit: val })}
-          >
+          <Picker enabled={isEditing} selectedValue={form.unit} onValueChange={(val) => updateForm("unit", val)}>
             {units.map((u) => (
               <Picker.Item key={u} label={u} value={u} />
             ))}
           </Picker>
         </View>
 
+        {/* Price Input */}
         <Input
           label="Harga"
           value={form.price}
           keyboardType="numeric"
           editable={isEditing}
-          onChangeText={(text) => setForm({ ...form, price: text })}
+          onChangeText={(text) => updateForm("price", text)}
           accessoryLeft={() => <Text>Rp</Text>}
         />
 
+        {/* Action Buttons */}
         <View style={styles.buttonContainer}>
           <Button status="primary" appearance="filled" loading={loading} disabled={loading} onPress={handleEdit}>
             {isEditing ? "Simpan" : "Edit"}

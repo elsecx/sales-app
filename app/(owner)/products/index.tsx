@@ -1,4 +1,8 @@
-import React, { useCallback, useState } from "react";
+import { FontAwesome } from "@expo/vector-icons";
+import { useFocusEffect } from "@react-navigation/native";
+import { router } from "expo-router";
+import React, { useCallback, useMemo, useState } from "react";
+import { ActivityIndicator } from "react-native";
 
 import { Input } from "@/components/Input";
 import { List, ListItem } from "@/components/List";
@@ -6,55 +10,68 @@ import { Text, View } from "@/components/Themed";
 import { Product, products } from "@/data/products";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { formatCurrencyID } from "@/utils/helpers";
-import { FontAwesome } from "@expo/vector-icons";
-import { useFocusEffect } from "@react-navigation/native";
-import { router } from "expo-router";
-import { ActivityIndicator } from "react-native";
 import { createProductsStyles } from "./styles";
+
+const PAGE_SIZE = 10; // Number of items per page
 
 export default function TabProductsScreen() {
   const colorScheme = useColorScheme() ?? "light";
   const styles = createProductsStyles(colorScheme);
 
+  // State for search input
   const [search, setSearch] = useState("");
-  const [visibleData, setVisibleData] = useState<Product[]>(products.slice(0, 10));
+
+  // State for visible products with pagination
+  const [visibleData, setVisibleData] = useState<Product[]>(products.slice(0, PAGE_SIZE));
   const [page, setPage] = useState(1);
+
+  // Loading indicators
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
+  // Refresh data when screen is focused
   useFocusEffect(
     useCallback(() => {
-      setPage(1);
-      setVisibleData(products.slice(0, 10));
+      resetData();
     }, [])
   );
 
+  // Reset visible data and pagination
+  const resetData = () => {
+    setPage(1);
+    setVisibleData(products.slice(0, PAGE_SIZE));
+  };
+
+  // Pull-to-refresh handler
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     setTimeout(() => {
-      setPage(1);
-      setVisibleData(products.slice(0, 10));
+      resetData();
       setRefreshing(false);
-    }, 800); // delay simulasi fetch
+    }, 600); // Simulate network request
   }, []);
 
+  // Load more data when scrolling to the end
   const loadMore = useCallback(() => {
-    if (loading) return;
-    if (visibleData.length >= products.length) return;
+    if (loading || visibleData.length >= products.length) return;
 
     setLoading(true);
     setTimeout(() => {
       const nextPage = page + 1;
-      const nextData = products.slice(0, nextPage * 10);
-      setVisibleData(nextData);
+      setVisibleData(products.slice(0, nextPage * PAGE_SIZE));
       setPage(nextPage);
       setLoading(false);
-    }, 600); // delay simulasi fetch
+    }, 600); // Simulate network request
   }, [loading, page, visibleData.length]);
 
-  const filteredData = visibleData.filter((item) => item.name.toLowerCase().includes(search.toLowerCase()));
+  // Filter products based on search input
+  const filteredData = useMemo(
+    () => visibleData.filter((item) => item.name.toLowerCase().includes(search.toLowerCase())),
+    [visibleData, search]
+  );
 
-  const renderItem = ({ item }: { item: any }): React.ReactElement => (
+  // Render each product item
+  const renderItem = ({ item }: { item: Product }) => (
     <ListItem
       title={item.name}
       description={`Stok: ${item.stock} ${item.unit}`}
@@ -70,6 +87,7 @@ export default function TabProductsScreen() {
 
   return (
     <View style={styles.container}>
+      {/* Search Bar */}
       <View style={styles.headerContainer}>
         <Input
           placeholder="Cari produk..."
@@ -80,6 +98,7 @@ export default function TabProductsScreen() {
         />
       </View>
 
+      {/* Product List */}
       <List
         data={filteredData}
         keyExtractor={(item) => item.id}

@@ -15,8 +15,8 @@ export default function TabNewProductScreen() {
   const colorScheme = useColorScheme() ?? "light";
   const styles = createNewProductStyles(colorScheme);
 
-  const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState({
+  // Initial state for the new product form
+  const initForm = () => ({
     name: "",
     category: "",
     stock: 0,
@@ -24,9 +24,17 @@ export default function TabNewProductScreen() {
     price: String(0),
   });
 
+  const [form, setForm] = useState(initForm);
+  const [loading, setLoading] = useState(false);
+
+  // Helper to update form state
+  const updateForm = (key: keyof typeof form, value: any) => setForm((prev) => ({ ...prev, [key]: value }));
+
+  // Check if any field is filled
   const isFormFilled =
     form.name !== "" || form.category !== "" || form.stock !== 0 || form.unit !== "" || form.price !== "0";
 
+  // Handler for Cancel button
   const handleCancel = () => {
     if (isFormFilled) {
       Alert.alert("Konfirmasi", "Data yang sudah diisi akan hilang. Yakin ingin membatalkan?", [
@@ -38,23 +46,33 @@ export default function TabNewProductScreen() {
     }
   };
 
-  const handleSave = () => {
-    if (!isFormFilled) {
+  // Validate form before saving
+  const validateForm = () => {
+    if (!form.name || !form.category || !form.stock || !form.unit || !form.price) {
       Alert.alert("Error", "Semua field wajib diisi!");
-      return;
+      return false;
     }
 
     if (isNaN(form.stock) || form.stock <= 0) {
       Alert.alert("Error", "Stok harus berupa angka lebih dari 0!");
-      return;
+      return false;
     }
 
     if (!/^\d+$/.test(form.price) || parseInt(form.price, 10) <= 0) {
       Alert.alert("Validasi", "Harga harus berupa angka lebih dari 0!");
-      return;
+      return false;
     }
 
+    return true;
+  };
+
+  // Handler for Save button
+  const handleSave = () => {
+    if (!validateForm()) return;
+
     setLoading(true);
+
+    // Simulate adding product
     setTimeout(() => {
       const newProduct: Product = {
         id: generateRandomId(),
@@ -65,55 +83,62 @@ export default function TabNewProductScreen() {
         price: parseInt(form.price, 10),
       };
 
+      // Add new product to the beginning of the products list
       products.unshift(newProduct);
 
       setLoading(false);
 
       Alert.alert("Berhasil", "Produk berhasil ditambahkan.", [{ text: "Ok", onPress: () => router.back() }]);
-    }, 600);
+    }, 600); // Simulate network request
   };
 
   return (
     <ScrollView style={styles.container}>
       <View style={styles.formContainer}>
+        {/* Product Name */}
         <Input
           label="Nama Produk"
           placeholder="Masukkan nama produk"
           value={form.name}
-          onChangeText={(text) => setForm({ ...form, name: text })}
+          onChangeText={(text) => updateForm("name", text)}
         />
 
+        {/* Category */}
         <Input
           label="Kategori"
           placeholder="Masukkan kategori produk"
           value={form.category}
-          onChangeText={(text) => setForm({ ...form, category: text })}
+          onChangeText={(text) => updateForm("category", text)}
         />
 
+        {/* Stock */}
         <InputInteger
           label="Stok"
           value={form.stock}
-          onValueChange={(val) => setForm({ ...form, stock: val })}
+          onValueChange={(val) => updateForm("stock", val)}
           min={0}
           max={9999}
           showControls
         />
 
+        {/* Unit */}
         <Input
           label="Satuan"
           placeholder="Masukkan satuan produk"
           value={form.unit}
-          onChangeText={(text) => setForm({ ...form, unit: text })}
+          onChangeText={(text) => updateForm("unit", text)}
         />
 
+        {/* Price */}
         <Input
           label="Harga"
           value={form.price}
           keyboardType="numeric"
-          onChangeText={(text) => setForm({ ...form, price: text })}
+          onChangeText={(text) => updateForm("price", text)}
           accessoryLeft={() => <Text>Rp</Text>}
         />
 
+        {/* Action Buttons */}
         <View style={styles.buttonContainer}>
           <Button status="primary" appearance="filled" loading={loading} disabled={loading} onPress={handleSave}>
             Simpan

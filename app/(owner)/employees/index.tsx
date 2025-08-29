@@ -1,7 +1,7 @@
 import { FontAwesome } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 import { router } from "expo-router";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { ActivityIndicator } from "react-native";
 
 import { Input } from "@/components/Input";
@@ -11,49 +11,66 @@ import { Employee, employees } from "@/data/employees";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { createEmployeesStyles } from "./styles";
 
+const PAGE_SIZE = 10; // Number of employees per page
+
 export default function TabEmployeesScreen() {
   const colorScheme = useColorScheme() ?? "light";
   const styles = createEmployeesStyles(colorScheme);
 
+  // State for search input
   const [search, setSearch] = useState("");
-  const [visibleData, setVisibleData] = useState<Employee[]>(employees.slice(0, 10));
+
+  // State for visible employees with pagination
+  const [visibleData, setVisibleData] = useState<Employee[]>(employees.slice(0, PAGE_SIZE));
   const [page, setPage] = useState(1);
+
+  // Loading indicators
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
+  // Refresh data when screen is focused
   useFocusEffect(
     useCallback(() => {
-      setPage(1);
-      setVisibleData(employees.slice(0, 10));
+      resetData();
     }, [])
   );
 
+  // Reset visible employees and pagination
+  const resetData = () => {
+    setPage(1);
+    setVisibleData(employees.slice(0, PAGE_SIZE));
+  };
+
+  // Pull-to-refresh handler
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     setTimeout(() => {
-      setPage(1);
-      setVisibleData(employees.slice(0, 10));
+      resetData();
       setRefreshing(false);
-    }, 800); // delay simulasi fetch
+    }, 600); // Simulate network request
   }, []);
 
+  // Load more employees when scrolling to the end
   const loadMore = useCallback(() => {
-    if (loading) return;
-    if (visibleData.length >= employees.length) return;
+    if (loading || visibleData.length >= employees.length) return;
 
     setLoading(true);
     setTimeout(() => {
       const nextPage = page + 1;
-      const nextData = employees.slice(0, nextPage * 10);
-      setVisibleData(nextData);
+      setVisibleData(employees.slice(0, nextPage * PAGE_SIZE));
       setPage(nextPage);
       setLoading(false);
-    }, 600); // delay simulasi fetch
+    }, 600); // Simulate network request
   }, [loading, page, visibleData.length]);
 
-  const filteredData = visibleData.filter((item) => item.name.toLowerCase().includes(search.toLowerCase()));
+  // Filter employees based on search input
+  const filteredData = useMemo(
+    () => visibleData.filter((item) => item.name.toLowerCase().includes(search.toLowerCase())),
+    [visibleData, search]
+  );
 
-  const renderItem = ({ item }: { item: any }): React.ReactElement => (
+  // Render each employee item
+  const renderItem = ({ item }: { item: Employee }) => (
     <ListItem
       title={item.name}
       description={item.phone}
@@ -70,6 +87,7 @@ export default function TabEmployeesScreen() {
 
   return (
     <View style={styles.container}>
+      {/* Search Bar */}
       <View style={styles.headerContainer}>
         <Input
           placeholder="Cari pegawai..."
@@ -80,6 +98,7 @@ export default function TabEmployeesScreen() {
         />
       </View>
 
+      {/* Employee List */}
       <List
         data={filteredData}
         keyExtractor={(item) => item.id}

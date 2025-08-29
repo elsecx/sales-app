@@ -16,9 +16,8 @@ export default function TabNewEmployeeScreen() {
   const colorScheme = useColorScheme() ?? "light";
   const styles = createNewEmployeeStyles(colorScheme);
 
-  const [loading, setLoading] = useState(false);
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [form, setForm] = useState({
+  // Initial state for the new employee form
+  const initForm = () => ({
     name: "",
     phone: "",
     address: "",
@@ -26,16 +25,18 @@ export default function TabNewEmployeeScreen() {
     joinedAt: null as Date | null,
   });
 
+  const [form, setForm] = useState(initForm);
+  const [loading, setLoading] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+
+  // Helper to update form state
+  const updateForm = (key: keyof typeof form, value: any) => setForm((prev) => ({ ...prev, [key]: value }));
+
+  // Check if any field is filled
   const isFormFilled =
     form.name !== "" || form.phone !== "" || form.address !== "" || form.status !== null || form.joinedAt !== null;
 
-  const handleDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
-    setShowDatePicker(Platform.OS === "ios");
-    if (selectedDate) {
-      setForm({ ...form, joinedAt: selectedDate });
-    }
-  };
-
+  // Handler for Cancel button
   const handleCancel = () => {
     if (isFormFilled) {
       Alert.alert("Konfirmasi", "Data yang sudah diisi akan hilang. Yakin ingin membatalkan?", [
@@ -47,10 +48,11 @@ export default function TabNewEmployeeScreen() {
     }
   };
 
-  const handleSave = () => {
-    if (!isFormFilled) {
+  // Validate form before saving
+  const validateForm = () => {
+    if (!form.name || !form.phone || !form.address || !form.joinedAt || form.status === null) {
       Alert.alert("Error", "Semua field wajib diisi!");
-      return;
+      return false;
     }
 
     const phoneRegex = /^(?:\+62|62|0)8[1-9][0-9]{6,10}$/;
@@ -59,13 +61,20 @@ export default function TabNewEmployeeScreen() {
         "Error",
         "Nomor telepon tidak valid. Gunakan format Indonesia, misalnya 08123456789 atau +628123456789."
       );
-      return;
+      return false;
     }
 
-    if (!form.joinedAt || !(form.joinedAt instanceof Date)) {
+    if (!(form.joinedAt instanceof Date)) {
       Alert.alert("Error", "Tanggal bergabung wajib diisi.");
-      return;
+      return false;
     }
+
+    return true;
+  };
+
+  // Handler for Save button
+  const handleSave = () => {
+    if (!validateForm()) return;
 
     setLoading(true);
     setTimeout(() => {
@@ -78,41 +87,49 @@ export default function TabNewEmployeeScreen() {
         joinedAt: form.joinedAt as Date,
       };
 
+      // Add new employee to the beginning of the list
       employees.unshift(newEmployee);
 
       setLoading(false);
-
       Alert.alert("Berhasil", "Pegawai berhasil ditambahkan.", [{ text: "Ok", onPress: () => router.back() }]);
-    }, 600);
+    }, 600); // Simulate network request
+  };
+
+  // Handler for Date Picker change
+  const handleDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
+    setShowDatePicker(Platform.OS === "ios");
+    if (selectedDate) updateForm("joinedAt", selectedDate);
   };
 
   return (
     <ScrollView style={styles.container}>
       <View style={styles.formContainer}>
+        {/* Employee Name */}
         <Input
           label="Nama Pegawai"
           placeholder="Masukkan nama pegawai"
           value={form.name}
-          onChangeText={(text) => setForm({ ...form, name: text })}
+          onChangeText={(text) => updateForm("name", text)}
         />
 
+        {/* Phone Number */}
         <Input
           label="Nomor Telepon"
           placeholder="Masukkan nomor telepon"
           keyboardType="phone-pad"
           value={form.phone}
-          onChangeText={(text) => setForm({ ...form, phone: text })}
+          onChangeText={(text) => updateForm("phone", text)}
         />
 
-        <View>
-          <Text style={styles.label}>Status</Text>
-          <Picker selectedValue={form.status} onValueChange={(val) => setForm({ ...form, status: val })}>
-            <Picker.Item label="=== [Pilih Status] ===" value={null} style={styles.placeholder} />
-            <Picker.Item label="Aktif" value={true} />
-            <Picker.Item label="Tidak Aktif" value={false} />
-          </Picker>
-        </View>
+        {/* Status Picker */}
+        <Text style={styles.label}>Status</Text>
+        <Picker selectedValue={form.status} onValueChange={(val) => updateForm("status", val)}>
+          <Picker.Item label="=== [Pilih Status] ===" value={null} style={styles.placeholder} />
+          <Picker.Item label="Aktif" value={true} />
+          <Picker.Item label="Tidak Aktif" value={false} />
+        </Picker>
 
+        {/* Joined Date */}
         <Input
           label="Tanggal Bergabung"
           placeholder="Masukkan tanggal bergabung"
@@ -128,15 +145,17 @@ export default function TabNewEmployeeScreen() {
           />
         )}
 
+        {/* Address */}
         <Input
           label="Alamat"
           placeholder="Masukkan alamat pegawai"
           value={form.address}
           multiline
           numberOfLines={3}
-          onChangeText={(text) => setForm({ ...form, address: text })}
+          onChangeText={(text) => updateForm("address", text)}
         />
 
+        {/* Action Buttons */}
         <View style={styles.buttonContainer}>
           <Button status="primary" appearance="filled" loading={loading} disabled={loading} onPress={handleSave}>
             Simpan

@@ -16,14 +16,12 @@ export default function TabEmployeeDetailScreen() {
   const colorScheme = useColorScheme() ?? "light";
   const styles = createEmployeeDetailStyles(colorScheme);
 
+  // Get employee ID from route params
   const { id } = useLocalSearchParams<{ id: string }>();
   const employee = employees.find((p) => p.id === id);
 
-  const [loading, setLoading] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const [showDatePicker, setShowDatePicker] = useState(false);
-
-  const [form, setForm] = useState({
+  // Initial form state
+  const initForm = () => ({
     name: employee?.name ?? "",
     phone: employee?.phone ?? "",
     address: employee?.address ?? "",
@@ -31,169 +29,140 @@ export default function TabEmployeeDetailScreen() {
     joinedAt: employee?.joinedAt ?? new Date(),
   });
 
-  const handleDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
-    setShowDatePicker(Platform.OS === "ios");
-    if (selectedDate) {
-      setForm({ ...form, joinedAt: selectedDate });
+  const [form, setForm] = useState(initForm);
+  const [loading, setLoading] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+
+  // Helper to update form state
+  const updateForm = (key: keyof typeof form, value: any) => setForm((prev) => ({ ...prev, [key]: value }));
+
+  // Validate form before saving
+  const validateForm = () => {
+    if (!form.name || !form.phone || !form.address || !form.joinedAt) {
+      Alert.alert("Error", "Semua field wajib diisi!");
+      return false;
     }
+
+    const phoneRegex = /^(?:\+62|62|0)8[1-9][0-9]{6,10}$/;
+    if (!phoneRegex.test(form.phone)) {
+      Alert.alert(
+        "Error",
+        "Nomor telepon tidak valid. Gunakan format Indonesia, misalnya 08123456789 atau +628123456789."
+      );
+      return false;
+    }
+
+    return true;
   };
 
+  // Handler for Edit / Save button (dummy)
   const handleEdit = () => {
-    if (isEditing) {
-      if (!form.name || !form.phone || !form.address || !form.status || !form.joinedAt) {
-        Alert.alert("Error", "Semua field wajib diisi!");
-        return;
-      }
+    if (!isEditing) return setIsEditing(true);
+    if (!validateForm()) return;
 
-      const phoneRegex = /^(?:\+62|62|0)8[1-9][0-9]{6,10}$/;
-      if (!phoneRegex.test(form.phone)) {
-        Alert.alert(
-          "Error",
-          "Nomor telepon tidak valid. Gunakan format Indonesia, misalnya 08123456789 atau +628123456789."
-        );
-        return;
-      }
+    setLoading(true);
+    setTimeout(() => {
+      const index = employees.findIndex((p) => p.id === id);
+      if (index !== -1) employees[index] = { ...employees[index], ...form };
 
-      if (!form.joinedAt || !(form.joinedAt instanceof Date)) {
-        Alert.alert("Error", "Tanggal bergabung wajib diisi.");
-        return;
-      }
-
-      setLoading(true);
-      setTimeout(() => {
-        console.log("Data tersimpan:", form);
-
-        const index = employees.findIndex((p) => p.id === id);
-        if (index !== -1) {
-          employees[index] = {
-            ...employees[index],
-            name: form.name,
-            phone: form.phone,
-            address: form.address,
-            status: form.status,
-            joinedAt: form.joinedAt,
-          };
-        }
-
-        setLoading(false);
-        setIsEditing(false);
-
-        Alert.alert("Berhasil", "Produk berhasil diperbarui.", [
-          {
-            text: "OK",
-            onPress: () => router.back(),
-          },
-        ]);
-      }, 600); // delay simulasi fetch
-    } else {
-      setIsEditing(true);
-    }
+      setLoading(false);
+      setIsEditing(false);
+      Alert.alert("Berhasil", "Pegawai berhasil diperbarui.", [{ text: "OK", onPress: () => router.back() }]);
+    }, 600); // Simulate network request
   };
 
+  // Handler for Delete button (dummy)
   const handleDelete = () => {
-    Alert.alert("Konfirmasi", "Yakin ingin menghapus produk ini?", [
+    Alert.alert("Konfirmasi", "Apakah Anda yakin ingin menghapus pegawai ini?", [
       { text: "Batal", style: "cancel" },
       {
-        text: "Hapus",
+        text: "Delete",
         style: "destructive",
         onPress: () => {
           setLoading(true);
-
           setTimeout(() => {
             const index = employees.findIndex((p) => p.id === id);
-            if (index !== -1) {
-              employees.splice(index, 1);
-            }
-
+            if (index !== -1) employees.splice(index, 1);
             setLoading(false);
-
-            Alert.alert("Berhasil", "Produk berhasil dihapus.", [
-              {
-                text: "OK",
-                onPress: () => router.back(),
-              },
-            ]);
-          }, 600); // delay simulasi
+            Alert.alert("Berhasil", "Pegawai berhasil dihapus.", [{ text: "OK", onPress: () => router.back() }]);
+          }, 600);
         },
       },
     ]);
   };
 
+  // Reset form to initial state
   const handleReset = () => {
-    setForm({
-      name: employee?.name ?? "",
-      phone: employee?.phone ?? "",
-      address: employee?.address ?? "",
-      status: employee?.status ?? false,
-      joinedAt: employee?.joinedAt ?? new Date(),
-    });
+    setForm(initForm());
     setIsEditing(false);
   };
 
-  const hasChanges = () => {
-    if (!employee) return false;
-    return (
-      form.name !== employee.name ||
+  // Check if form has unsaved changes
+  const hasChanges = () =>
+    employee &&
+    (form.name !== employee.name ||
       form.phone !== employee.phone ||
       form.address !== employee.address ||
       form.status !== employee.status ||
-      form.joinedAt !== employee.joinedAt
-    );
-  };
+      form.joinedAt !== employee.joinedAt);
 
+  // Handler for Cancel button
   const handleCancel = () => {
     if (isEditing && hasChanges()) {
-      Alert.alert("Konfirmasi", "Data yang sudah diisi akan hilang. Yakin ingin membatalkan?", [
+      Alert.alert("Konfirmasi", "Perubahan yang belum disimpan akan hilang. Apakah Anda yakin ingin membatalkan?", [
         { text: "Batal", style: "cancel" },
-        { text: "Ya, batalkan", style: "destructive", onPress: () => handleReset() },
+        { text: "Ya, batalkan", style: "destructive", onPress: handleReset },
       ]);
     } else {
       setIsEditing(false);
     }
   };
 
-  if (!employee) {
+  // Return early if employee not found
+  if (!employee)
     return (
       <View style={styles.container}>
-        <Text>Pegawai tidak ditemukan.</Text>
+        <Text>Employee not found.</Text>
       </View>
     );
-  }
+
+  // Handler for DatePicker change
+  const handleDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
+    setShowDatePicker(Platform.OS === "ios");
+    if (selectedDate) updateForm("joinedAt", selectedDate);
+  };
 
   return (
     <ScrollView style={styles.container}>
       <View style={styles.formContainer}>
+        {/* Employee Name */}
         <Input
           label="Nama Pegawai"
-          placeholder="Masukkan nama pegawai"
           value={form.name}
           editable={isEditing}
-          onChangeText={(text) => setForm({ ...form, name: text })}
+          onChangeText={(text) => updateForm("name", text)}
         />
 
+        {/* Phone Number */}
         <Input
           label="Nomor Telepon"
-          placeholder="Masukkan nomor telepon"
+          keyboardType="phone-pad"
           value={form.phone}
           editable={isEditing}
-          onChangeText={(text) => setForm({ ...form, phone: text })}
+          onChangeText={(text) => updateForm("phone", text)}
         />
 
-        <View>
-          <Text style={styles.label}>Status</Text>
-          <Picker
-            enabled={isEditing}
-            selectedValue={form.status}
-            onValueChange={(val) => setForm({ ...form, status: val })}
-          >
-            <Picker.Item key={1} label="Aktif" value={true} />
-            <Picker.Item key={2} label="Tidak Aktif" value={false} />
-          </Picker>
-        </View>
+        {/* Status Picker */}
+        <Text style={styles.label}>Status</Text>
+        <Picker enabled={isEditing} selectedValue={form.status} onValueChange={(val) => updateForm("status", val)}>
+          <Picker.Item key={1} label="Active" value={true} />
+          <Picker.Item key={2} label="Inactive" value={false} />
+        </Picker>
 
+        {/* Join Date */}
         <Input
           label="Tanggal Bergabung"
-          placeholder="Masukkan tanggal bergabung"
           value={formatDateID(form.joinedAt)}
           editable={isEditing}
           onPressIn={() => setShowDatePicker(true)}
@@ -207,17 +176,18 @@ export default function TabEmployeeDetailScreen() {
           />
         )}
 
+        {/* Address */}
         <Input
           label="Alamat"
-          placeholder="Masukkan alamat pegawai"
           value={form.address}
           editable={isEditing}
           multiline
           numberOfLines={3}
-          onChangeText={(text) => setForm({ ...form, address: text })}
+          onChangeText={(text) => updateForm("address", text)}
         />
       </View>
 
+      {/* Action Buttons */}
       <View style={styles.buttonContainer}>
         <Button status="primary" appearance="filled" loading={loading} disabled={loading} onPress={handleEdit}>
           {isEditing ? "Simpan" : "Edit"}
