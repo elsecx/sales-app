@@ -57,7 +57,7 @@ export default function TabEmployeesScreen() {
     <ListItem
       title={item.name}
       description={item.phone}
-      onPress={() => router.push(`/products/${item.id}`)}
+      onPress={() => router.push(`/employees/${item.id}`)}
       accessoryRight={() => (
         <View style={styles.accessoryRightContainer}>
           <Text style={[styles.status, item.status ? styles.statusActive : styles.statusInactive]}>
