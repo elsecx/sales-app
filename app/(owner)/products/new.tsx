@@ -1,6 +1,6 @@
 import { router } from "expo-router";
 import React, { useState } from "react";
-import { Alert } from "react-native";
+import { Alert, ScrollView } from "react-native";
 
 import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
@@ -74,7 +74,7 @@ export default function TabNewProductScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.formContainer}>
         <Input
           label="Nama Produk"
@@ -124,6 +124,6 @@ export default function TabNewProductScreen() {
           </Button>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
