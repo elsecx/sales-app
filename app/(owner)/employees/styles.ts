@@ -64,3 +64,31 @@ export const createEmployeeDetailStyles = (theme: "light" | "dark") => {
     },
   });
 };
+
+export const createNewEmployeeStyles = (theme: "light" | "dark") => {
+  const colors = Colors[theme];
+
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      flexDirection: "column",
+      backgroundColor: colors.background,
+      padding: 15,
+    },
+    formContainer: {
+      flexDirection: "column",
+      gap: 15,
+    },
+    label: {
+      fontSize: 16,
+      color: colors.text.default,
+      marginBottom: 10,
+    },
+    buttonContainer: {
+      gap: 15,
+    },
+    placeholder: {
+      color: colors.text.hint,
+    },
+  });
+};
