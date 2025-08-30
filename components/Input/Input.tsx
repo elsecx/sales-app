@@ -16,7 +16,7 @@ export type InputProps = TextInputProps & {
   accessoryRight?: ReactNode | (() => ReactNode);
   secureTextEntry?: boolean;
   size?: InputSize;
-  disabled?: boolean;
+  editable?: boolean;
 };
 
 export default function Input({
@@ -27,7 +27,7 @@ export default function Input({
   accessoryRight,
   secureTextEntry,
   size = "medium",
-  disabled = false,
+  editable = true,
   style,
   ...props
 }: InputProps) {
@@ -36,27 +36,20 @@ export default function Input({
 
   return (
     <View style={[styles.container, style]}>
-      {label && <Text style={styles.label}>
-        {typeof label === "function" ? label() : label}
-      </Text>}
+      {label && <Text style={styles.label}>{typeof label === "function" ? label() : label}</Text>}
 
-      <View
-        style={[
-          styles.inputWrapper,
-          disabled && styles.disabledWrapper,
-        ]}
-      >
-        {accessoryLeft && <View style={styles.accessory}>
-          {typeof accessoryLeft === "function" ? accessoryLeft() : accessoryLeft}
-        </View>}
+      <View style={[styles.inputWrapper, !editable && styles.disabledWrapper]}>
+        {accessoryLeft && (
+          <View style={styles.accessory}>{typeof accessoryLeft === "function" ? accessoryLeft() : accessoryLeft}</View>
+        )}
 
         <TextInput
           placeholderTextColor={styles.placeholder.color}
-          editable={!disabled}
+          editable={editable}
           secureTextEntry={secureTextEntry}
           style={[
             styles.input,
-            props.multiline && { 
+            props.multiline && {
               minHeight: 40 * (props.numberOfLines ?? 1),
               textAlignVertical: "top",
             },
@@ -65,14 +58,14 @@ export default function Input({
           {...props}
         />
 
-        {accessoryRight && <View style={styles.accessory}>
-          {typeof accessoryRight === "function" ? accessoryRight() : accessoryRight}
-        </View>}
+        {accessoryRight && (
+          <View style={styles.accessory}>
+            {typeof accessoryRight === "function" ? accessoryRight() : accessoryRight}
+          </View>
+        )}
       </View>
 
-      {caption && <Text style={styles.caption}>
-        {typeof caption === "function" ? caption() : caption}
-      </Text>}
+      {caption && <Text style={styles.caption}>{typeof caption === "function" ? caption() : caption}</Text>}
     </View>
-  )
+  );
 }

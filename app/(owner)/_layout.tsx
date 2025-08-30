@@ -43,9 +43,7 @@ export default function OwnerLayout() {
         name="index"
         options={{
           title: "Dashboard",
-          tabBarIcon: ({ color, size }) => (
-            <FontAwesome name="home" size={size} color={color} />
-          ),
+          tabBarIcon: ({ color, size }) => <FontAwesome name="home" size={size} color={color} />,
           headerLeft: () => (
             <Link href="/login" asChild>
               <Pressable>
@@ -65,65 +63,29 @@ export default function OwnerLayout() {
       <Tabs.Screen
         name="sales"
         options={{
-          title: "Penjualan",
-          tabBarIcon: ({ color, size }) => (
-            <FontAwesome name="money" size={size} color={color} />
-          ),
-          headerLeft: () => (
-            <Link href="/login" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="calendar"
-                    size={25}
-                    color={Colors[colorScheme].text.default}
-                    style={{ marginLeft: 15, marginRight: 10, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
-          ),
-          headerRight: () => (
-            <Link href="/login" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="plus"
-                    size={25}
-                    color={Colors[colorScheme].text.default}
-                    style={{marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
-          )
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => <FontAwesome name="money" size={size} color={color} />,
         }}
       />
       <Tabs.Screen
         name="products"
         options={{
-          title: "Produk",
-          tabBarIcon: ({ color, size }) => (
-            <FontAwesome name="cubes" size={size} color={color} />
-          ),
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => <FontAwesome name="cubes" size={size} color={color} />,
         }}
       />
       <Tabs.Screen
-        name="employee"
+        name="employees"
         options={{
-          title: "Pegawai",
-          tabBarIcon: ({ color, size }) => (
-            <FontAwesome name="users" size={size} color={color} />
-          ),
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => <FontAwesome name="users" size={size} color={color} />,
         }}
       />
       <Tabs.Screen
         name="shops"
         options={{
           title: "Toko",
-          tabBarIcon: ({ color, size }) => (
-            <FontAwesome name="shopping-basket" size={size} color={color} />
-          ),
+          tabBarIcon: ({ color, size }) => <FontAwesome name="shopping-basket" size={size} color={color} />,
         }}
       />
     </Tabs>

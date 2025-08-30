@@ -8,17 +8,13 @@ const sizeMap = {
   large: { fontSize: 18, padding: 12 },
 };
 
-export const createInputStyles = (
-  theme: "light" | "dark",
-  status: InputStatus,
-  size: InputSize
-) => {
+export const createInputStyles = (theme: "light" | "dark", status: InputStatus, size: InputSize) => {
   const colors = Colors[theme];
   const sizeConf = sizeMap[size];
 
   return StyleSheet.create({
     container: {
-      // 
+      //
     },
     label: {
       fontSize: 16,
@@ -35,8 +31,7 @@ export const createInputStyles = (
       paddingHorizontal: sizeConf.padding,
     },
     disabledWrapper: {
-      backgroundColor: colors.disabled,
-      opacity: 0.6,
+      opacity: 0.3,
     },
     input: {
       flex: 1,
@@ -53,7 +48,7 @@ export const createInputStyles = (
       color: status === "basic" ? colors.text.default : colors[status].default,
     },
     accessory: {
-      marginHorizontal: 4,
+      marginHorizontal: sizeConf.padding,
     },
   });
-}
+};

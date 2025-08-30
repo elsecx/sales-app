@@ -20,10 +20,10 @@ export const createButtonStyles = (
   let backgroundColor;
   let borderColor;
   let textColor;
-  switch(appearance) {
+  switch (appearance) {
     case "filled":
       backgroundColor = colors[status].default;
-      textColor = colors.text.default;
+      textColor = status === "basic" ? colors.text.default : colors.text.alternative;
       break;
     case "outline":
       backgroundColor = colors[status].transparent;
@@ -33,7 +33,7 @@ export const createButtonStyles = (
     case "ghost":
       backgroundColor = "transparent";
       textColor = colors[status].default;
-      break
+      break;
   }
 
   return StyleSheet.create({
@@ -68,4 +68,4 @@ export const createButtonStyles = (
       gap: 6,
     },
   });
-}
+};
